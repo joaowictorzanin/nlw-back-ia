@@ -1,13 +1,24 @@
 import { fastify } from "fastify";
+import { prisma } from "./lib/prisma";
+import { getAllPromptsRoute } from "./routes/get-all-promps";
+import { uploadVideoRoute } from "./routes/upload-video";
+import { createTranscriptionRoute } from "./routes/create-transcription";
+import { generateAiCompletionRoute } from "./routes/generate-ai-completion";
+import fastifyCors from "@fastify/cors";
 
- const app = fastify()
+const app = fastify()
 
- app.get('/', () => {
-  return 'Hello World'
- })
+app.register(fastifyCors, {
+  origin: "*",
+})
 
- app.listen({
-  port: 3333,
- }).then(() => {
-  console.log('HTTP Server Running!')
- })
+app.register(getAllPromptsRoute)
+app.register(uploadVideoRoute)
+app.register(createTranscriptionRoute)
+app.register(generateAiCompletionRoute)
+
+app.listen({
+port: 3333,
+}).then(() => {
+console.log('HTTP Server Running!')
+})
